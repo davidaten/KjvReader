@@ -11,7 +11,7 @@ Kjv.FunRead.ObjInit = function () {
     obj.ChpIdx = 1;
     obj.VerIdx = 1;
     obj.GbOn = 1;//Gb2312
-    obj.B5On = 1;//Big5
+    obj.B5On = 0;//Big5
     obj.TrAry = [];//Big5
 
     obj.Update = function () {
@@ -32,7 +32,7 @@ Kjv.FunRead.ObjInit = function () {
                 if (cb_obj.B5On)
                     cb_obj.B5On = 0;
                 else
-                    cb_obj.B5On = 1;
+                    //cb_obj.B5On = 1;
                 break;
         }
         cb_obj.Update();

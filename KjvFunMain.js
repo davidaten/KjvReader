@@ -30,7 +30,7 @@ Kjv.FunMain.ObjInit = function () {
         var ary = [];
         ary.push("display: table-cell");
         ary.push("vertical-align: top");
-        ary.push("width: 50%");
+        ary.push("width: 100%");
         return ary.join(";");
     }
     obj.FindResClickEvt = function (obj, tag, prm) {
@@ -96,7 +96,7 @@ Kjv.FunMain.ObjInit = function () {
         tb.appendChild(tr);
         tr.style.cssText = this.TrCssGet();
 
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < this.ColumnAry.length; i++) {
             var col_obj = this.ColumnAry[i];
             td=col_obj.DivMake();
             tr.appendChild(td);
@@ -113,7 +113,7 @@ Kjv.FunMain.ObjInit = function () {
 	find_obj.FindRegMake("jerusalem|temple|new");
 	find_obj.Find();
 	find_obj.VerClickCb = CallbackSet(obj.FindResClickEvt, obj, 0);
-	obj.ColumnAry.push(find_obj);
+	//obj.ColumnAry.push(find_obj);
     var read_obj = Kjv.FunRead.ObjInit();
     obj.ColumnAry.push(read_obj);
     return obj;
