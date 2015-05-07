@@ -54,6 +54,7 @@ DwxUiMenu.ObjInit = function () {
         item_obj.Div.style.cssText = this.ItemCssGet(item_obj);
     }
     obj.SubShow = function (item_obj, on_off) {
+        console.log("DwxUiMenu" + "-SubShow" + on_off);
         //item_obj.Div.children[0].style.cssText = this.TextCssGet(item_obj);
         if (on_off) {
 			var offsets = item_obj.Div.getBoundingClientRect();
@@ -152,6 +153,12 @@ DwxUiMenu.ObjInit = function () {
         }
         else
             this.SelectMsDn(item_obj);
+        if (item_obj.SubMenu){
+            if (item_obj.Hovered) 
+                this.MsOnEvt(item_obj, 0);
+            else
+                this.MsOnEvt(item_obj, 1);
+        }
     }
     obj.MsDnSet = function (item_obj) {
         item_obj.Div.addEventListener("mousedown",

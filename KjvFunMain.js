@@ -109,11 +109,13 @@ Kjv.FunMain.ObjInit = function () {
         //div0.parentElement.replaceChild(div, div0);
     }
     var find_obj = Kjv.FunFind.ObjInit();
-	find_obj.BkAry.push(66);
-	find_obj.FindRegMake("jerusalem|temple|new");
+    for (var i = 1; i < 66; i++)
+        find_obj.BkAry.push(i);
+	//find_obj.BkAry.push(66);
+	find_obj.FindRegMake("thy neighbour");
 	find_obj.Find();
 	find_obj.VerClickCb = CallbackSet(obj.FindResClickEvt, obj, 0);
-	//obj.ColumnAry.push(find_obj);
+	obj.ColumnAry.push(find_obj);
     var read_obj = Kjv.FunRead.ObjInit();
     obj.ColumnAry.push(read_obj);
     return obj;
