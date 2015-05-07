@@ -115,7 +115,7 @@ Kjv.FunMain.ObjInit = function () {
 	find_obj.FindRegMake("thy neighbour");
 	find_obj.Find();
 	find_obj.VerClickCb = CallbackSet(obj.FindResClickEvt, obj, 0);
-	obj.ColumnAry.push(find_obj);
+	//obj.ColumnAry.push(find_obj);
     var read_obj = Kjv.FunRead.ObjInit();
     obj.ColumnAry.push(read_obj);
     return obj;
