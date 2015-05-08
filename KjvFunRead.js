@@ -61,6 +61,8 @@ Kjv.FunRead.ObjInit = function () {
                             return;
                         cb_obj.BkIdx++;
                         break;
+                    default:
+                        return;
                 }
                 break;
             case 1:
@@ -115,6 +117,8 @@ Kjv.FunRead.ObjInit = function () {
                             return;
                         cb_obj.ChpIdx++;
                         break;
+                    default:
+                        return;
                 }
                 break;
             case 1:
