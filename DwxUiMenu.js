@@ -42,9 +42,10 @@ DwxUiMenu.ObjInit = function () {
     obj.ItemSubSet = function (idx,menu,alignx,aligny) {
         var item_obj = this.ItemAry[idx];
         item_obj.SubMenu = menu;
-        menu.MenuAlign = 1;
+        item_obj.SubMenuOn = 0;
 		item_obj.SubMenuX = alignx;
 		item_obj.SubMenuY = aligny;
+		menu.MenuAlign = 1;
         //item_obj.Div.appendChild(menu.WrapDiv);
     }
 
@@ -54,7 +55,10 @@ DwxUiMenu.ObjInit = function () {
         item_obj.Div.style.cssText = this.ItemCssGet(item_obj);
     }
     obj.SubShow = function (item_obj, on_off) {
+        if (!item_obj.SubMenu)
+            return;
         //item_obj.Div.children[0].style.cssText = this.TextCssGet(item_obj);
+        item_obj.SubMenuOn = on_off;
         if (on_off) {
 			var offsets = item_obj.Div.getBoundingClientRect();
 			var top = offsets.top;
@@ -92,14 +96,11 @@ DwxUiMenu.ObjInit = function () {
     obj.MsOnEvt = function (item_obj,dir) {
         if (dir) {
             item_obj.Hovered = 1;
-            if (item_obj.SubMenu)
-                obj.SubShow(item_obj, 1);//Menuitem_obj.SubMenu.WrapDiv.style.display = "block";
+            //obj.SubShow(item_obj, 1);//Menuitem_obj.SubMenu.WrapDiv.style.display = "block";
         }
         else {
             item_obj.Hovered = 0;
-            if (item_obj.SubMenu)
-                this.SubShow(item_obj, 0);
-            //    item_obj.SubMenu.WrapDiv.style.display = "none";
+            //this.SubShow(item_obj, 0);
         }
         this.TextCssUpd(item_obj);
     }
@@ -150,8 +151,14 @@ DwxUiMenu.ObjInit = function () {
             //var this_obj=this.MsDnCb.CbObj;
             this.MsDnCb.CbFun(this.MsDnCb.CbObj, this.MsDnCb.CbTag, item_obj.Tag);
         }
-        else
+        
             this.SelectMsDn(item_obj);
+
+            if (item_obj.SubMenuOn) 
+                this.SubShow(item_obj, 0);
+            else
+                this.SubShow(item_obj, 1);
+
     }
     obj.MsDnSet = function (item_obj) {
         item_obj.Div.addEventListener("mousedown",
@@ -211,7 +218,7 @@ DwxUiMenu.ObjInit = function () {
         ary.push(sprintf("margin: %s", this.ItemMarginStr));
         ary.push(sprintf("padding: %s", this.ItemPaddingStr));
         ary.push("vertical-align: middle");
-        ary.push("text-align: center");
+        ary.push("text-align: left");
 
         var fc = this.ItemColorStr;
         var bc = this.ItemBkColorStr;
@@ -266,14 +273,12 @@ DwxUiMenu.DemoLoad = function () {
     menu.SelectType = 1;
     menu.DirX = 1;
     menu.ItemAryAdd(["1fads", "1sfdgsd", "1sdfgsdfgsd"]);
-    menu.DivMake();
-    document.body.appendChild(menu.WrapDiv);
 
 
     var sub1 = DwxUiMenu.ObjInit();
     sub1.DirX = 0;
     sub1.ItemAryAdd(["1-1fads","1-2sfdgsd","1-3sdfgsdfgsd","1-4sdfgsdfgsd"]);
-    sub1.DivMake();
+    //sub1.DivMake();
     menu.ItemSubSet(0, sub1, 1, 2);
 
     var sub2 = DwxUiMenu.ObjInit();
@@ -285,6 +290,8 @@ DwxUiMenu.DemoLoad = function () {
     sub3.ItemAryAdd(["2-1fads", "2-2sfdgsd", "2-3sdfgsdfgsd"]);
     sub3.DivMake();
 
+    menu.DivMake();
+    document.body.appendChild(menu.WrapDiv);
 
 
     var div = document.createElement('div');

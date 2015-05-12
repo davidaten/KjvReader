@@ -96,7 +96,7 @@ Kjv.FunMain.ObjInit = function () {
         tb.appendChild(tr);
         tr.style.cssText = this.TrCssGet();
 
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < this.ColumnAry.length; i++) {
             var col_obj = this.ColumnAry[i];
             td=col_obj.DivMake();
             tr.appendChild(td);
@@ -109,8 +109,10 @@ Kjv.FunMain.ObjInit = function () {
         //div0.parentElement.replaceChild(div, div0);
     }
     var find_obj = Kjv.FunFind.ObjInit();
-	find_obj.BkAry.push(66);
-	find_obj.FindRegMake("jerusalem|temple|new");
+    for (var i = 1; i < 66; i++)
+        find_obj.BkAry.push(i);
+	//find_obj.BkAry.push(66);
+	find_obj.FindRegMake("thy neighbour");
 	find_obj.Find();
 	find_obj.VerClickCb = CallbackSet(obj.FindResClickEvt, obj, 0);
 	obj.ColumnAry.push(find_obj);
