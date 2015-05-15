@@ -36,6 +36,7 @@ Kjv.FunRead.ObjInit = function () {
                 break;
         }
         cb_obj.Update();
+        return 0;
     }
     obj.MenuBkEvt = function (cb_obj, cb_tag, menu_tag) {
         switch (cb_tag) {
@@ -62,7 +63,7 @@ Kjv.FunRead.ObjInit = function () {
                         cb_obj.BkIdx++;
                         break;
                     default:
-                        return;
+                        return 1;
                 }
                 break;
             case 1:
@@ -74,19 +75,20 @@ Kjv.FunRead.ObjInit = function () {
         cb_obj.ChpIdx = 1;
         cb_obj.VerIdx = 1;
         cb_obj.Update();
+        return 0;
     }
     obj.MenuBkMake = function () {
-        var menu = DwxUiMenu.ObjInit();
+        var menu = new DwxUiMenu() ;
         menu.DirX = 1;
         menu.ItemAryAdd(["<<", "<", "Books", ">", ">>"]);
         menu.MsDnCb = CallbackSet(obj.MenuBkEvt, obj, 0);
         this.MenuBk = menu;
 
-        var bk_sub = DwxUiMenu.ObjInit();
+        var bk_sub = new DwxUiMenu() ;
         bk_sub.DirX = 1;
         for (var i = 0; i < 66; i++) {
             var bk_obj = Kjv.Bk.ObjMake(i + 1);
-            bk_sub.ItemAdd(bk_obj.BkName, i + 1);
+            bk_sub.ItemAdd(i + 1, bk_obj.BkName);
         }
         bk_sub.MsDnCb = CallbackSet(obj.MenuBkEvt, obj, 1);
         this.MenuBk.ItemSubSet(2, bk_sub, 0, 2);
@@ -118,7 +120,7 @@ Kjv.FunRead.ObjInit = function () {
                         cb_obj.ChpIdx++;
                         break;
                     default:
-                        return;
+                        return 1;
                 }
                 break;
             case 1:
@@ -127,15 +129,16 @@ Kjv.FunRead.ObjInit = function () {
         };
         cb_obj.VerIdx = 1;
         cb_obj.Update();
+        return 0;
     }
     obj.MenuChpMake = function () {
-        var menu = DwxUiMenu.ObjInit();
+        var menu = new DwxUiMenu() ;
         menu.DirX = 1;
         menu.ItemAryAdd(["<<", "<", "Chapters", ">", ">>"]);
         menu.MsDnCb = CallbackSet(obj.MenuChpEvt, obj, 0);
         this.MenuChp = menu;
 
-        var chp_sub = DwxUiMenu.ObjInit();
+        var chp_sub = new DwxUiMenu() ;
         chp_sub.DirX = 1;
         var bk_obj = Kjv.Bk.ObjMake(this.BkIdx);
         for (var i = 0; i < bk_obj.ChpNumInBk; i++) {
@@ -147,10 +150,10 @@ Kjv.FunRead.ObjInit = function () {
 
     obj.MenuMake = function () {
 
-        var menu = DwxUiMenu.ObjInit();
+        var menu = new DwxUiMenu() ;
         menu.DirX = 1;
-        menu.ItemAdd("简体", "gb");
-        menu.ItemAdd("繁體", "b5");
+        menu.ItemAdd("gb", "简体");
+        menu.ItemAdd("b5", "繁體");
         menu.MsDnCb = CallbackSet(obj.MenuLangEvt, obj, 0);
         this.MenuLang = menu;
 
