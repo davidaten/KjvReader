@@ -1,71 +1,76 @@
-DwxUiMenu = {};
 
-DwxUiMenu.ObjInit = function () {
-    var obj = {};
+DwxUiMenu = function () {
+    DwxUiDiv.call(this);
 
-    obj.FontSize = 16;
-    obj.ItemColorStr = "hsl(0,0%,100%)";
-    obj.ItemBkColorStr = "#428bca";//"hsl(0,0%,100%)";
-    obj.ItemMarginStr = "0px";
-    obj.ItemPaddingStr = "5px 10px";
-    obj.ItemBdNum = 1;
-    obj.ItemBdType = "solid";
+    this.FontSize = 16;
+    this.ItemColorStr = "hsl(0,0%,100%)";
+    this.ItemBkColorStr = "#428bca";//"hsl(0,0%,100%)";
+    this.ItemMarginStr = "0px";
+    this.ItemPaddingStr = "5px 10px";
+    this.ItemBdNum = 1;
+    this.ItemBdType = "solid";
 
-    obj.MenuAlign = 0;
-    obj.WidthEven = 0;
+    this.MenuAlign = 0;
+    this.WidthEven = 0;
 
-    obj.ColorStr = "hsl(0,0%,0%)";
-    obj.BkColorStr = "#428bca";//"hsl(0,0%,100%)";
+    this.ColorStr = "hsl(0,0%,0%)";
+    this.BkColorStr = "#428bca";//"hsl(0,0%,100%)";
 
-    obj.ItemAry = [];
-    obj.ItemAryAdd = function (ary) {
+    this.ItemAry = [];
+    this.ItemAryAdd = function (ary) {
 
         for (var i = 0; i < ary.length; i++) {
-            this.ItemAdd(ary[i]);
+
+
+            this.ItemAdd(ary[i],ary[i]);
         }
         return this.ItemAry;
     }
-    obj.ItemAdd = function (text, tag) {
+    this.ItemAdd = function (tag, text) {
         var item_obj = {};
         item_obj.Selected = 0;
         item_obj.Hovered = 0;
         item_obj.SubMenu = null;
         item_obj.Div = null;
-        item_obj.Text = text;
         if (tag)
             item_obj.Tag = tag;
         else
-            item_obj.Tag = text;
+            item_obj.Tag = this.ItemAry.length;
+        var btn_obj = new DwxUiBtnPlus();
+        if (text) {
+            btn_obj.SecAdd("Text", text, text);
+        }
+        btn_obj.MsDnCb = CallbackSet(this.MsDnCbFun, this, item_obj);        item_obj.BtnObj = btn_obj;
+        //item_obj.prototype.WrapDiv=btn_obj.WrapDiv;
+        //item_obj.BtnObj = DwxUiBtnPlus.ObjInit();
         this.ItemAry.push(item_obj);
         return item_obj;
     }
-    obj.ItemSubSet = function (idx,menu,alignx,aligny) {
+    this.ItemSubSet = function (idx,menu,alignx,aligny) {
         var item_obj = this.ItemAry[idx];
         item_obj.SubMenu = menu;
         item_obj.SubMenuOn = 0;
 		item_obj.SubMenuX = alignx;
 		item_obj.SubMenuY = aligny;
 		menu.MenuAlign = 1;
+		menu.WrapCssSet();
         //item_obj.Div.appendChild(menu.WrapDiv);
     }
 
-
-    obj.TextCssUpd = function (item_obj) {
-        //item_obj.Div.children[0].style.cssText = this.TextCssGet(item_obj);
-        item_obj.Div.style.cssText = this.ItemCssGet(item_obj);
-    }
-    obj.SubShow = function (item_obj, on_off) {
+    
+    this.SubShow = function (item_obj, on_off) {
         if (!item_obj.SubMenu)
             return;
         //item_obj.Div.children[0].style.cssText = this.TextCssGet(item_obj);
         item_obj.SubMenuOn = on_off;
         if (on_off) {
-			var offsets = item_obj.Div.getBoundingClientRect();
+            //var offsets = item_obj.BtnObj.WrapDiv.getBoundingClientRect();
+            var offsets = item_obj.BtnObj.WrapDiv.getBoundingClientRect();
 			var top = offsets.top;
 			var left = offsets.left;
 			switch(item_obj.SubMenuX){
                 case 0:
-            		item_obj.SubMenu.WrapDiv.style.left = "0px";//sprintf("px", this.WrapDiv.offsetWidth);
+					item_obj.SubMenu.WrapDiv.style.left = "0px";//sprintf("px", this.WrapDiv.offsetWidth);
                     break;
                 case 1:
 					item_obj.SubMenu.WrapDiv.style.left = sprintf("%spx", offsets.left);;
@@ -82,7 +87,7 @@ DwxUiMenu.ObjInit = function () {
 					item_obj.SubMenu.WrapDiv.style.top = sprintf("%spx", offsets.top);;
 					break;
 				case 2:
-					item_obj.SubMenu.WrapDiv.style.top = sprintf("%spx", offsets.top+item_obj.Div.offsetHeight);
+					item_obj.SubMenu.WrapDiv.style.top = sprintf("%spx", offsets.top+item_obj.BtnObj.WrapDiv.offsetHeight);
                     break;
             }
             
@@ -93,7 +98,7 @@ DwxUiMenu.ObjInit = function () {
         }
     }
 
-    obj.MsOnEvt = function (item_obj,dir) {
+    this.MsOnEvt = function (item_obj,dir) {
         if (dir) {
             item_obj.Hovered = 1;
             //obj.SubShow(item_obj, 1);//Menuitem_obj.SubMenu.WrapDiv.style.display = "block";
@@ -104,13 +109,13 @@ DwxUiMenu.ObjInit = function () {
         }
         this.TextCssUpd(item_obj);
     }
-    obj.MsOnSet = function (item_obj) {
-
+    this.MsOnSet = function (item_obj) {
+        /*
         item_obj.Div.addEventListener("mouseenter",
         (function () {
             //var ver_idx = idx;
             var hnd = function () {
-                obj.MsOnEvt(item_obj,1);
+                this.MsOnEvt(item_obj,1);
             }
             return hnd;
         })(), false);
@@ -118,14 +123,15 @@ DwxUiMenu.ObjInit = function () {
         (function () {
             //var ver_idx = idx;
             var hnd = function () {
-                obj.MsOnEvt(item_obj, 0);
+                this.MsOnEvt(item_obj, 0);
             }
             return hnd;
         })(), false);
+        */
     }
-    obj.SelectType = 0;
-    obj.SelectedAry = [];
-    obj.SelectMsDn = function (item_obj) {
+    this.SelectType = 0;
+    this.SelectedAry = [];
+    this.SelectMsDn = function (item_obj) {
         switch (this.SelectType) {
             case 0:
                 return;
@@ -145,80 +151,70 @@ DwxUiMenu.ObjInit = function () {
             case 2:
         }
     }
-    obj.MsDnCb = null;
-    obj.MsDnEvt = function (item_obj) {
-        if (this.MsDnCb) {
-            //var this_obj=this.MsDnCb.CbObj;
-            this.MsDnCb.CbFun(this.MsDnCb.CbObj, this.MsDnCb.CbTag, item_obj.Tag);
+    this.MsDnCb = null;
+    this.MsDnCbFun = function (cb_obj, item_obj,sec_obj) {
+
+        if (cb_obj.MsDnCb) {
+            //var obj_obj=cb_obj.MsDnCb.CbObj;
+            var res = cb_obj.MsDnCb.CbFun(cb_obj.MsDnCb.CbObj, cb_obj.MsDnCb.CbTag, item_obj.Tag, sec_obj.Tag);
+            if (!res) return;
         }
-        
-            this.SelectMsDn(item_obj);
+        cb_obj.SelectMsDn(item_obj);
 
-            if (item_obj.SubMenuOn) 
-                this.SubShow(item_obj, 0);
-            else
-                this.SubShow(item_obj, 1);
-
+        if (item_obj.SubMenuOn) 
+            cb_obj.SubShow(item_obj, 0);
+        else
+            cb_obj.SubShow(item_obj, 1);
     }
-    obj.MsDnSet = function (item_obj) {
-        item_obj.Div.addEventListener("mousedown",
-        (function () {
-            //var ver_idx = idx;
-            var hnd = function () {
-                obj.MsDnEvt(item_obj);
-            }
-            return hnd;
-        })(), false);
-    }
-
-
-    obj.WrapCssGet = function () {
-        var ary = [];
+  
+    this.WrapCssSet = function () {
         //ary.push("list-style: none");
-        ary.push("box-sizing: border-box");
-        ary.push("display: block");
+        this.CssAttSet("box-sizing", "border-box");
+        this.CssAttSet("display", "block");
         if (this.MenuAlign) {
-            ary.push("position: fixed");
-            ary.push("top: -9999px");
-            ary.push("left: -9999px");
+            this.CssAttSet("position", "fixed");
+            this.CssAttSet("top", "-9999px");
+            this.CssAttSet("left", "-9999px");
         }
         else {
-			//ary.push("position: relative");
+			//this.CssAttSet("position", "relative");
             if (this.WidthEven) {
-                ary.push("width: 100%");
-                ary.push("display: table");
+                this.CssAttSet("width", "100%");
+                this.CssAttSet("display", "table");
             };
         }
-        ary.push("margin: 0px");
-        ary.push("border: 0px solid red");
-        //ary.push("border-radius: 6px 6px 6px 6px"); 
-        ary.push("padding: 0px");
-        //ary.push("overflow: hidden");
+        this.CssAttSet("margin", "0px");
+        this.CssAttSet("border", "0px solid red");
+        //this.CssAttSet("border-radius", "6px 6px 6px 6px"); 
+        this.CssAttSet("padding", "0px");
+        //this.CssAttSet("overflow", "hidden");
 
-        //ary.push(sprintf("background-color: %s",this.BkColorStr));
-        //ary.push(sprintf("height: %spx", h));
-        return ary.join(";");
+        //this.CssAttSet(sprintf("background-color", "%s",this.BkColorStr));
+        //this.CssAttSet(sprintf("height", "%spx", h));
     }
+    this.WrapCssSet();
 
-    obj.ItemCssGet = function (item_obj) {
-        var ary = [];
+    this.TextCssUpd = function (item_obj) {
 
-        ary.push("box-sizing: border-box");
-        //ary.push("position: relative");
-        if (this.DirX ) {
+        var btn = item_obj.BtnObj;
+        //item_obj.Div.children[0].style.cssText = this.TextCssGet(item_obj);
+
+        btn.CssAttSet("box-sizing", "border-box");
+        //btn.CssAttSet("position", "relative");
+        if (this.DirX) {
                      //if (this.WidthEven)
             if (this.WidthEven) {
-                ary.push("display: table-cell");
-                ary.push(sprintf("width: %s%", 100 / this.ItemAry.length));
-        }
+                btn.CssAttSet("display", "table-cell");
+                btn.CssAttSet("width", sprintf("%s%", 100 / this.ItemAry.length));
+            }
             else
-				//ary.push("float: left");//inline will make height/width may like 13.223
-                ary.push("display: inline-block");//inline will make height/width may like 13.223
+                //btn.CssAttSet("float", "left");//inline will make height/width may like 13.223
+                btn.CssAttSet("display", "inline-block");//inline will make height/width may like 13.223
         }
-        ary.push(sprintf("margin: %s", this.ItemMarginStr));
-        ary.push(sprintf("padding: %s", this.ItemPaddingStr));
-        ary.push("vertical-align: middle");
-        ary.push("text-align: left");
+        btn.CssAttSet("margin", sprintf("%s", this.ItemMarginStr));
+        btn.CssAttSet("padding", sprintf("%s", this.ItemPaddingStr));
+        btn.CssAttSet("vertical-align", "middle");
+        btn.CssAttSet("text-align", "left");
 
         var fc = this.ItemColorStr;
         var bc = this.ItemBkColorStr;
@@ -229,63 +225,55 @@ DwxUiMenu.ObjInit = function () {
         var bdc = bc;
         if (item_obj.Hovered)
             bdc = fc;
-        ary.push(sprintf("border: %spx %s %s", this.ItemBdNum, this.ItemBdType, bdc));
-        ary.push(sprintf("color: %s", fc));
-        ary.push(sprintf("background-color: %s", bc));
+        btn.CssAttSet("border", sprintf("%spx %s %s", this.ItemBdNum, this.ItemBdType, bdc));
+        btn.CssAttSet("color", sprintf("%s", fc));
+        btn.CssAttSet("background-color", sprintf("%s", bc));
 
-        return ary.join(";");
-        //if (this.WidthEven)
-        //    ary.push(sprintf("width: %s%", 100 / this.ItemAry.length));
-    };
-
-    obj.DivMake = function () {
+        //item_obj.BtnObj.CssAttSet("display", "block");
+        btn.WrapDiv.style.cssText = btn.CssStrGet();
+    }
+    this.DivMake = function () {
         var div;
         div=document.createElement('div');
-        div.style.cssText = this.WrapCssGet();
+        div.style.cssText = this.CssStrGet();
         this.WrapDiv = div;
 
         for (var i = 0; i < this.ItemAry.length; i++) {
             var item_obj = this.ItemAry[i];
-            div = document.createElement('div');
-            this.WrapDiv.appendChild(div);
-            item_obj.Div = div;
-            div.style.cssText = this.ItemCssGet(item_obj);
-            div.innerHTML  = item_obj.Text;
+            item_obj.BtnObj.DivMake();
+            this.WrapDiv.appendChild(item_obj.BtnObj.WrapDiv);
+            this.TextCssUpd(item_obj);
             this.MsOnSet(item_obj);
-            this.MsDnSet(item_obj);
             if (!item_obj.SubMenu)
                 continue;
             item_obj.SubMenu.DivMake();
-            item_obj.Div.appendChild( item_obj.SubMenu.WrapDiv);
+            item_obj.BtnObj.WrapDiv.appendChild( item_obj.SubMenu.WrapDiv);
         }
         return this.WrapDiv;
     }
-
-
-    return obj;
 }
 DwxUiMenu.DemoLoad = function () {
     var div = document.createElement('div');
     div.innerHTML = "adsfasdfasdfaf";
     document.body.appendChild(div);
 
-    var menu = DwxUiMenu.ObjInit();
+    var menu = new DwxUiMenu();
     menu.SelectType = 1;
     menu.DirX = 1;
     menu.ItemAryAdd(["1fads", "1sfdgsd", "1sdfgsdfgsd"]);
 
 
-    var sub1 = DwxUiMenu.ObjInit();
+    var sub1 = new DwxUiMenu();
     sub1.DirX = 0;
     sub1.ItemAryAdd(["1-1fads","1-2sfdgsd","1-3sdfgsdfgsd","1-4sdfgsdfgsd"]);
     //sub1.DivMake();
     menu.ItemSubSet(0, sub1, 1, 2);
 
-    var sub2 = DwxUiMenu.ObjInit();
+    var sub2 = new DwxUiMenu();
     sub2.DirX = 0;
     sub2.ItemAryAdd(["2-1fads","2-2sfdgsd","2-3sdfgsdfgsd"]);
     sub2.DivMake();
-    var sub3 = DwxUiMenu.ObjInit();
+    var sub3 = new DwxUiMenu();
     sub3.DirX = 0;
     sub3.ItemAryAdd(["2-1fads", "2-2sfdgsd", "2-3sdfgsdfgsd"]);
     sub3.DivMake();

@@ -109,10 +109,10 @@ Kjv.FunMain.ObjInit = function () {
         //div0.parentElement.replaceChild(div, div0);
     }
     var find_obj = Kjv.FunFind.ObjInit();
-    for (var i = 1; i < 66; i++)
-        find_obj.BkAry.push(i);
+    for (var i = 0; i < 44; i++)
+        find_obj.BkAry.push(i+1);
 	//find_obj.BkAry.push(66);
-	find_obj.FindRegMake("thy neighbour");
+	find_obj.FindRegMake("full of");
 	find_obj.Find();
 	find_obj.VerClickCb = CallbackSet(obj.FindResClickEvt, obj, 0);
 	obj.ColumnAry.push(find_obj);

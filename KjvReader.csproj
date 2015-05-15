@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BaseFun.js" />
+    <Content Include="DwxUiBtnPlus.js" />
     <Content Include="DwxUiColorPick.js" />
     <Content Include="DwxUiDrager.js" />
     <Content Include="DwxUiMenu.js" />
