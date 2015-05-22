@@ -115,6 +115,29 @@ Kjv.FunFind.ObjInit = function () {
 	    ary.push(obj.Pos1Str);
 	    return ary.join("");
 	}
+
+	obj.BkTreeMake = function () {
+	    var tree= new DwxUiTree();
+	    tree.NodeAdd(0, -1, "T-0", "New Testament");
+	    tree.NodeAdd(0, -1, "T-1", "Old Testament");
+	    var bk_idx = 1;
+	    for (var i = 0; i < KjvCatMapAry.length; i+=2) {
+	        var t_obj;
+	        if (i < 10)
+	            t_obj = tree.NodeAry[0];
+	        else
+	            t_obj = tree.NodeAry[1];
+	        tree.NodeAdd(t_obj, -1, sprintf("C-%s",i/2),KjvCatMapAry[i]);
+	        for (var j = 0; j < KjvCatMapAry[i + 1]; j++) {
+	            var bk_obj = Kjv.Bk.ObjMake(bk_idx);
+	            tree.NodeAdd(t_obj.NodeAry[i/2], -1, sprintf("B-%s", bk_idx), bk_obj.BkName);
+	        }
+	    }
+	    tree.PreMake();
+	    this.BkTree = tree;
+	}
+	obj.BkTreeMake();
+
 	obj.Find = function () {
 	    this.FindResAry = [];
 		for (var i=0;i<this.BkAry.length;i++){
@@ -139,7 +162,7 @@ Kjv.FunFind.ObjInit = function () {
 		}
 	}
 			        
-    obj.DivMake = function () {
+    obj.DivResMake = function () {
         this.WrapDiv = document.createElement('div');
         //this.HeaderSet(this.WrapDiv,bk_obj,chp_obj);
 
@@ -173,6 +196,15 @@ Kjv.FunFind.ObjInit = function () {
         //Kjv.Bkmk.Ary[0].VerMax = chp_obj.VerNumInChp;
         //var div0 = document.getElementById("KjvVerListDiv");//KjvParsePce();
         //div0.parentElement.replaceChild(div, div0);
+    }
+
+    obj.DivMake = function () {
+        var div;
+        div = document.createElement('div');
+        this.BkTree.DivMake();
+        div.appendChild(this.BkTree.WrapDiv);
+
+        this.WrapDiv = div;
     }
 
     return obj;
