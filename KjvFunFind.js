@@ -117,24 +117,37 @@ Kjv.FunFind.ObjInit = function () {
 	}
 
 	obj.BkTreeMake = function () {
-	    var tree= new DwxUiTree();
-	    tree.NodeAdd(0, -1, "T-0", "New Testament");
-	    tree.NodeAdd(0, -1, "T-1", "Old Testament");
 	    var bk_idx = 1;
-	    for (var i = 0; i < KjvCatMapAry.length; i+=2) {
-	        var t_obj;
-	        if (i < 10)
-	            t_obj = tree.NodeAry[0];
+	    var tree_l1 = new DwxUiTree();
+	    for (var l1 = 0; l1 < 2;l1 ++){
+	        if (l1 == 0) 
+	            tree_l1.NodeAdd(-1, "T-0", "Old Testament");
 	        else
-	            t_obj = tree.NodeAry[1];
-	        tree.NodeAdd(t_obj, -1, sprintf("C-%s",i/2),KjvCatMapAry[i]);
-	        for (var j = 0; j < KjvCatMapAry[i + 1]; j++) {
-	            var bk_obj = Kjv.Bk.ObjMake(bk_idx);
-	            tree.NodeAdd(t_obj.NodeAry[i/2], -1, sprintf("B-%s", bk_idx), bk_obj.BkName);
+	            tree_l1.NodeAdd(-1, "T-1", "New Testament");
+
+	        var tree_l2 = new DwxUiTree();
+	        var c_off = l1*10;
+	        for (var l2 = 0 ; l2 < 10 ; l2+=2) {
+	            tree_l2.NodeAdd(-1, sprintf("C-%s", (c_off + l2) / 2), KjvCatMapAry[c_off + l2]);
+	            var tree_l3 = new DwxUiTree();
+	            tree_l3.DirX = 1;
+	            //tree_l3.SubSignOn = 0;
+	            for (var l3 = 0; l3 < KjvCatMapAry[c_off + l2 + 1]; l3++) {
+	                var bk_obj = Kjv.Bk.ObjMake(bk_idx);
+	                tree_l3.NodeAdd(-1, sprintf("B-%s", bk_idx), bk_obj.BkName);
+	                bk_idx++;
+	            }
+
+	            if (((l1 == 0) && (l2 == 0)) || ((l1 == 1) && (l2 == 0)) || ((l1 == 1) && (l2 == 8)))
+	                tree_l2.NodeAry[l2 / 2].SubStat = 1;
+	            else
+	                tree_l2.NodeAry[l2 / 2].SubStat = 0;
+	            tree_l2.NodeSubSet(l2 / 2, tree_l3);
 	        }
+	        tree_l1.NodeSubSet(l1, tree_l2);
 	    }
-	    tree.PreMake();
-	    this.BkTree = tree;
+	    tree_l1.PreMake();
+	    this.BkTree = tree_l1;
 	}
 	obj.BkTreeMake();
 
@@ -160,6 +173,23 @@ Kjv.FunFind.ObjInit = function () {
 				}
 			}
 		}
+	}
+
+	obj.BkTreeScan = function () {
+	    BkAry = {};
+	    var bk_idx = 1;
+	    var tree_l1 = this.BkTree;
+	    for (var l1 = 0; l1 < tree_l1.NodeAry.length; l1++) {
+	        var tree_l2 = tree_l1.NodeAry[l1].SubList;
+	        for (var l2 = 0; l2 < tree_l2.NodeAry.length; l2++) {
+	            var tree_l3 = tree_l2.NodeAry[l2].SubList;
+                for (var l3 = 0; l3 < tree_l3.NodeAry.length; l3++) {
+                    if (tree_l3.NodeAry[l3].ChkStatOn)
+                        BkAry.push(bk_idx);
+                    bk_idx++;
+                }
+            }
+        }
 	}
 			        
     obj.DivResMake = function () {
@@ -205,6 +235,7 @@ Kjv.FunFind.ObjInit = function () {
         div.appendChild(this.BkTree.WrapDiv);
 
         this.WrapDiv = div;
+        return div;
     }
 
     return obj;
