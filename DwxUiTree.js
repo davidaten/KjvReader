@@ -108,7 +108,7 @@ DwxUiTree = function () {
     this.MsDnCbFun = function (cb_obj, node_obj, sec_obj) {
         if (cb_obj.MsDnCb) {
             //var obj_obj=cb_obj.MsDnCb.CbObj;
-            var res = cb_obj.MsDnCb.CbFun(cb_obj.MsDnCb.CbObj, cb_obj.MsDnCb.CbTag, item_obj.Tag, sec_obj.Tag);
+            var res = cb_obj.MsDnCb.CbFun(cb_obj.MsDnCb.CbObj, cb_obj.MsDnCb.CbTag, node_obj.Tag, sec_obj.Tag);
             if (!res) return;
         }
      
