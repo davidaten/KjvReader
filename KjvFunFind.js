@@ -1,101 +1,102 @@
-﻿//Kjv.FunFind: find the matchs among BkAry and make div to show the found results.
-Kjv.FunFind = {};
-Kjv.FunFind.ObjInit = function () {
-    var obj = {};
-    obj.ColorStr = "hsl(0,0%,0%)";
-    obj.BkColorStr = "hsl(0,0%,100%)";
-    obj.HtColorStr = "hsl(248,100%,38%)";
-    obj.HtBkColorStr = "hsl(0,0%,100%)";
-    obj.FtSize = 16;
-    obj.BkAry = [];
-    obj.FindResAry = [];
-    obj.GbOn = 1;//Gb2312
-    obj.B5On = 1;//Big5
+﻿//KjvFunFind: find the matchs among BkAry and make div to show the found results.
+function KjvFunFind () {
+    DwxUiDiv.call(this);
 
-    obj.TbCssGet = function () {
-        var ary = [];
-        ary.push("display: table");
-        //ary.push(sprintf("background-color: %s",this.BkColorStr));
-        ary.push("font-family: Verdana, Geneva, sans-serif");
-        ary.push(sprintf("font-size: %spx", this.FtSize));
-        ary.push("font-weight: 400");//400=Normal 700=bold,(100~900);
-        //ary.push(sprintf("color: %s",this.ColorStr));
-        return ary.join(";");
-    }
+    this.ColorStr = "hsl(0,0%,0%)";
+    this.BkColorStr = "hsl(0,0%,100%)";
+    this.HtColorStr = "hsl(248,100%,38%)";
+    this.HtBkColorStr = "hsl(0,0%,100%)";
+    this.FtSize = 16;
+    this.BkAry = [];
+    this.FindResAry = [];
+    this.GbOn = 1;//Gb2312
+    this.B5On = 1;//Big5
+    var obj = this;
 
-    obj.TrCssGet = function (ht) {
-        var ary = [];
-        ary.push("display: table-row");
-        if (ht == 0) {
-            ary.push(sprintf("background-color: %s", this.BkColorStr));
-            ary.push(sprintf("color: %s", this.ColorStr));
-        }
-        else {
-            ary.push(sprintf("background-color: %s", this.HtBkColorStr));
-            ary.push(sprintf("color: %s", this.HtColorStr));
-        }
-        return ary.join(";");
-    }
+    this.BkTreeMake = function () {
+	    var bk_idx = 1;
+	    var tree_l1 = new DwxUiTree();
+	    for (var l1 = 0; l1 < 2;l1 ++){
+	        if (l1 == 0) 
+	            tree_l1.NodeAdd(-1, "T-0", "Old Testament");
+	        else
+	            tree_l1.NodeAdd(-1, "T-1", "New Testament");
 
-    obj.TdCssGet = function () {
-        var ary = [];
-        ary.push("display: table-cell");
-        ary.push("vertical-align: top");
-        return ary.join(";");
-    }
+	        var tree_l2 = new DwxUiTree();
+	        var c_off = l1*10;
+	        for (var l2 = 0 ; l2 < 10 ; l2+=2) {
+	            tree_l2.NodeAdd(-1, sprintf("C-%s", (c_off + l2) / 2), KjvCatMapAry[c_off + l2]);
+	            var tree_l3 = new DwxUiTree();
+	            tree_l3.DirX = 1;
+	            //tree_l3.SubSignOn = 0;
+	            for (var l3 = 0; l3 < KjvCatMapAry[c_off + l2 + 1]; l3++) {
+	                var bk_obj = Kjv.Bk.ObjMake(bk_idx);
+	                tree_l3.NodeAdd(-1, sprintf("B-%s", bk_idx), bk_obj.BkName);
+	                bk_idx++;
+	            }
 
-    obj.MsDnEvt = function (idx) {
-        if (!obj.VerClickCb)
-            return;
-        var prm={};
-        prm.BkIdx = obj.FindResAry[idx].BkIdx;
-        prm.ChpIdx = obj.FindResAry[idx].ChpIdx;
-        prm.VerIdx = obj.FindResAry[idx].VerIdx;
-        obj.VerClickCb.CbFun(obj.VerClickCb.CbObj, obj.VerClickCb.CbTag,prm);
-    }
-    obj.MsDnSet = function (div, idx) {
-        div.addEventListener("mousedown",
-        (function () {
-            //var ver_idx = idx;
-            var hnd = function () {
-                obj.MsDnEvt(idx);
-            }
-            return hnd;
-        })(), false);
-    }
-    obj.HeaderSet = function (wrap_div,bk_obj,chp_obj) {
-        var div = document.createElement('div');
-        wrap_div.appendChild(div);
-        var ary = [];
-        ary.push("text-align: center");
-        ary.push("white-space: pre");
-        ary.push("font-family: Verdana, Geneva, sans-serif");
-        ary.push(sprintf("font-size: %spx", this.FtSize*1.25));
-        ary.push("font-weight: 400");//400=Normal 700=bold,(100~900);
-        div.style.cssText = ary.join(";");
-        div.innerHTML = sprintf("Book %s: %s(<small>%s</small>)    Chapter: %s", bk_obj.BkIdx, bk_obj.BkName, bk_obj.BkBrf, chp_obj.ChpIdxInBk);
-    }
-    obj.BtnBarSet = function (tb) {
-        var tr, td;
-        tr = document.createElement('div');
-        tb.appendChild(tr);
-        tr.style.cssText = this.TrCssGet(0);
-        var btn_ary = ['&laquo;', '&lt;', 'Index', '&gt;', '&raquo;'];
-        for (var i = 0; i < 5; i++) {
-            td = document.createElement('div');
-            tr.appendChild(td);
-            td.innerHTML = btn_ary[i];
-            td.style.cssText = this.TdCssGet(1);
-        }
-    }
-    
-	obj.FindRegMake= function (exp_str,flag_str){
-	
+	            if (((l1 == 0) && (l2 == 0)) || ((l1 == 1) && (l2 == 0)) || ((l1 == 1) && (l2 == 8)))
+	                tree_l2.NodeAry[l2 / 2].SubStat = 1;
+	            else
+	                tree_l2.NodeAry[l2 / 2].SubStat = 0;
+	            tree_l2.NodeSubSet(l2 / 2, tree_l3);
+	        }
+	        tree_l1.NodeSubSet(l1, tree_l2);
+	    }
+	    tree_l1.PreMake();
+	    this.BkTree = tree_l1;
+	}
+    this.BkTreeMake();
+    this.BkTreeScan = function () {
+	    this.BkAry = [];
+	    var bk_idx = 1;
+	    var tree_l1 = this.BkTree;
+	    for (var l1 = 0; l1 < tree_l1.NodeAry.length; l1++) {
+	        var tree_l2 = tree_l1.NodeAry[l1].SubList;
+	        for (var l2 = 0; l2 < tree_l2.NodeAry.length; l2++) {
+	            var tree_l3 = tree_l2.NodeAry[l2].SubList;
+	            for (var l3 = 0; l3 < tree_l3.NodeAry.length; l3++) {
+	                if (tree_l3.NodeAry[l3].ChkStat)
+	                    this.BkAry.push(bk_idx);
+	                bk_idx++;
+	            }
+	        }
+	    }
+	}
+
+    this.ActMenuCbFun = function (cb_obj, cb_tag, node_obj_tag, sec_obj_tag) {
+	    switch (node_obj_tag) {
+	        case "Find":
+	            cb_obj.BkTreeScan();
+	            cb_obj.Find();
+	            cb_obj.ResDivMake();
+	            return 0;
+	            break;
+	    }
+	}
+
+    this.ActMenuMake = function () {
+	    var bk_idx = 1;
+	    var tree_l1 = new DwxUiTree();
+	    tree_l1.DirX = 1;
+	    tree_l1.ChkSignOn = 0;
+	    tree_l1.NodeAdd(-1, "Find", "Find");
+	    tree_l1.NodeAdd(-1, "ClrBk", "Clear book ranges");
+	    tree_l1.NodeAdd(-1, "ClrVer", "Clear verse conditions");
+	    tree_l1.NodeAdd(-1, "ClrRes", "Clear searching results");
+	    tree_l1.PreMake();
+	    tree_l1.MsDnCb = CallbackSet(this.ActMenuCbFun, this, 0);
+	    this.ActMenu = tree_l1;
+	}
+    this.ActMenuMake();
+
+    this.FindRegMake = function (exp_str, flag_str) {
+
 	    if (!flag_str)
-			flag_str='ig';
-			
+	        flag_str = 'ig';
+
 	    this.FindReg = new RegExp(exp_str, flag_str);
-	    this.Pos0Str = sprintf('<span style="color:%s;background-color:%s;">',this.HtColorStr, this.HtBkColorStr);
+	    this.Pos0Str = sprintf('<span style="color:%s;background-color:%s;">', this.HtColorStr, this.HtBkColorStr);
 	    this.Pos1Str = '</span>';
 	}
     //var input = "A string with 3 numbers in it... 42 and 88.";
@@ -107,7 +108,7 @@ Kjv.FunFind.ObjInit = function () {
     //   Found 42 at 33
     //   Found 88 at 40
     //string.replace callback: match,group1,group2,group3...,offset,string
-	obj.FindRplCb = function(match,$1){
+    this.FindRplCb = function (match, $1) {
 	    obj.FindRplCnt++;
 	    var ary = [];
 	    ary.push(obj.Pos0Str);
@@ -115,8 +116,9 @@ Kjv.FunFind.ObjInit = function () {
 	    ary.push(obj.Pos1Str);
 	    return ary.join("");
 	}
-	obj.Find = function () {
+    this.Find = function () {
 	    this.FindResAry = [];
+	    this.FindRegMake(this.VerDiv.value);
 		for (var i=0;i<this.BkAry.length;i++){
 			var bk_obj = Kjv.Bk.ObjMake(this.BkAry[i]);
 			for (var j=0;j<bk_obj.ChpNumInBk;j++){
@@ -138,14 +140,72 @@ Kjv.FunFind.ObjInit = function () {
 			}
 		}
 	}
-			        
-    obj.DivMake = function () {
-        this.WrapDiv = document.createElement('div');
-        //this.HeaderSet(this.WrapDiv,bk_obj,chp_obj);
 
+
+    this.TbCssGet = function () {
+	    var ary = [];
+	    ary.push("display: table");
+	    //ary.push(sprintf("background-color: %s",this.BkColorStr));
+	    ary.push("font-family: Verdana, Geneva, sans-serif");
+	    ary.push(sprintf("font-size: %spx", this.FtSize));
+	    ary.push("font-weight: 400");//400=Normal 700=bold,(100~900);
+	    //ary.push(sprintf("color: %s",this.ColorStr));
+	    return ary.join(";");
+	}
+
+    this.TrCssGet = function (ht) {
+	    var ary = [];
+	    ary.push("display: table-row");
+	    if (ht == 0) {
+	        ary.push(sprintf("background-color: %s", this.BkColorStr));
+	        ary.push(sprintf("color: %s", this.ColorStr));
+	    }
+	    else {
+	        ary.push(sprintf("background-color: %s", this.HtBkColorStr));
+	        ary.push(sprintf("color: %s", this.HtColorStr));
+	    }
+	    return ary.join(";");
+	}
+
+    this.TdCssGet = function () {
+	    var ary = [];
+	    ary.push("display: table-cell");
+	    ary.push("vertical-align: top");
+	    return ary.join(";");
+	}
+
+    this.MsDnEvt = function (idx) {
+	    if (!obj.VerClickCb)
+	        return;
+	    var prm = {};
+	    prm.BkIdx = obj.FindResAry[idx].BkIdx;
+	    prm.ChpIdx = obj.FindResAry[idx].ChpIdx;
+	    prm.VerIdx = obj.FindResAry[idx].VerIdx;
+	    obj.VerClickCb.CbFun(obj.VerClickCb.CbObj, obj.VerClickCb.CbTag, prm);
+	}
+    this.MsDnSet = function (div, idx) {
+	    div.addEventListener("mousedown",
+        (function () {
+            //var ver_idx = idx;
+            var hnd = function () {
+                obj.MsDnEvt(idx);
+            }
+            return hnd;
+        })(), false);
+	}
+
+    this.ResDivMake = function () {
+        var res_div = document.createElement('div');
+        //this.HeaderSet(this.WrapDiv,bk_obj,chp_obj);
+        if (this.VerDiv)
+            res_div.innerHTML = sprintf("Total %s result(s) in %s book(s) for searching [%s]:",
+                this.FindResAry.length, this.BkAry.length, this.VerDiv.value);
+        else
+            res_div.innerHTML = "No searching results here.";
         var tb = document.createElement('div');
         tb.style.cssText = this.TbCssGet();
-        this.WrapDiv.appendChild(tb);
+        res_div.appendChild(tb);
+
 
         for (var i = 0; i < this.FindResAry.length; i++) {
             var res_obj = this.FindResAry[i];
@@ -169,21 +229,81 @@ Kjv.FunFind.ObjInit = function () {
                 td.style.cssText = this.TdCssGet(0);
             }//j
         }//i  
-        return this.WrapDiv;
+        if (this.FindResAry.length == 0) {
+
+        }
+
+
+        var old = this.ResDiv;
+        if (old)
+            old.parentElement.replaceChild(res_div, old);
+        this.ResDiv = res_div;
+        //return this.WrapDiv;
         //Kjv.Bkmk.Ary[0].VerMax = chp_obj.VerNumInChp;
         //var div0 = document.getElementById("KjvVerListDiv");//KjvParsePce();
         //div0.parentElement.replaceChild(div, div0);
     }
 
+    this.DivWalk = function (cb_obj, cb_tag, node) {
+        var name = node.getAttribute("data-div-name");
+        if (!name)
+            return;
+        var ary = name.split("-");
+        switch (ary[0]) {
+            case "bk":
+                node.appendChild(cb_obj.BkTree.WrapDiv);
+                break;
+            case "ver":
+                cb_obj.VerDiv=node;
+                break;
+            case "act":
+                node.appendChild(cb_obj.ActMenu.WrapDiv);
+                break;
+            case "res":
+                node.appendChild(cb_obj.ResDiv);
+                break;
+        }
+    }
+
+    this.DivMake = function () {
+        this.BkTree.DivMake();
+        this.ActMenu.DivMake();
+        this.ResDivMake();
+        var ary = [];
+        ary.push('Range of books:');
+        ary.push('<div data-div-name="bk"></div>');
+        ary.push('<br>');
+        ary.push('Conditions of verses:');
+        ary.push('<br>');
+        ary.push('<input data-div-name="ver" type="text"/>');
+        ary.push('<br>');
+        ary.push('<br>');
+        ary.push('<div data-div-name="act"></div>');
+        ary.push('<br>');
+        ary.push('<div data-div-name="res"></div>');
+        var div = document.createElement('div');
+        div.innerHTML = ary.join("");
+
+        var cb_obj = CallbackSet(this.DivWalk, this, 0);
+        ElementWalk(div, cb_obj);
+
+/*
+        var div;
+        div = document.createElement('div');
+        this.BkTree.DivMake();
+        div.appendChild(this.BkTree.WrapDiv);
+*/
+        this.WrapDiv = div;
+        return div;
+    }
+
     return obj;
 }
-Kjv.FunFind.Demo = function () {
+http://www.kingjamesbibleonline.org/search-advanced.php
+KjvFunFind.Demo = function () {
 
-    var obj = Kjv.FunFind.ObjInit();
-	obj.BkAry.push(66);
-	obj.FindRegMake("jerusalem|temple|new");
-	obj.Find();
-	obj.DivMake();
+    var obj = new KjvFunFind();
+    obj.DivMake();
     document.body.appendChild(obj.WrapDiv);
 }
 

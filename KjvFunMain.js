@@ -1,39 +1,26 @@
-﻿//Kjv.FunMain: find the matchs among BkAry and make div to show the found results.
-Kjv.FunMain = {};
-Kjv.FunMain.ObjInit = function () {
-    var obj = {};
-    obj.ColorStr = "hsl(0,0%,0%)";
-    obj.BkColorStr = "hsl(0,0%,100%)";
-    obj.HtColorStr = "hsl(248,100%,38%)";
-    obj.HtBkColorStr = "hsl(0,0%,100%)";
-    obj.FtSize = 16;
-    obj.ColumnAry = [];
+﻿//KjvFunMain: find the matchs among BkAry and make div to show the found results.
+KjvFunMain = function () {
+
+    this.ColorStr = "hsl(0,0%,0%)";
+    this.BkColorStr = "hsl(0,0%,100%)";
+    this.HtColorStr = "hsl(248,100%,38%)";
+    this.HtBkColorStr = "hsl(0,0%,100%)";
+    this.FtSize = 16;
+    this.ColumnAry = [];
     
-    obj.TbCssGet = function () {
-        var ary = [];
-        ary.push("display: table");
-        //ary.push(sprintf("background-color: %s",this.BkColorStr));
-        ary.push("font-family: Verdana, Geneva, sans-serif");
-        ary.push(sprintf("font-size: %spx", this.FtSize));
-        ary.push("font-weight: 400");//400=Normal 700=bold,(100~900);
-        //ary.push(sprintf("color: %s",this.ColorStr));
-        return ary.join(";");
-    }
+    DwxUiDiv.call(this);
+    this.CssAttSet("font-family", "Verdana, Geneva, sans-serif");
+    this.CssAttSet("font-size", sprintf("%spx", this.FtSize));
+    this.CssAttSet("font-weight", sprintf("%s", 400));
 
-    obj.TrCssGet = function (ht) {
-        var ary = [];
-        ary.push("display: table-row");
-        return ary.join(";");
-    }
-
-    obj.TdCssGet = function () {
+    this.TdCssGet = function () {
         var ary = [];
         ary.push("display: table-cell");
         ary.push("vertical-align: top");
-        ary.push("width: 100%");
+        ary.push("width: 50%");
         return ary.join(";");
     }
-    obj.FindResClickEvt = function (obj, tag, prm) {
+    this.FindResClickEvt = function (obj, tag, prm) {
         var find_obj = obj.ColumnAry[tag];
         var read_obj = obj.ColumnAry[tag+1];
         read_obj.BkIdx = prm.BkIdx;
@@ -44,63 +31,64 @@ Kjv.FunMain.ObjInit = function () {
         old_div.parentElement.replaceChild(read_obj.WrapDiv, old_div);
     }
 
-    obj.MsDnEvt = function (idx) {
+    this.MsDnEvt = function (idx) {
 
     }
-    obj.MsDnSet = function (div, idx) {
+    this.MsDnSet = function (div, idx) {
         div.addEventListener("mousedown",
         (function () {
             //var ver_idx = idx;
             var hnd = function () {
-                obj.MsDnEvt(idx);
+                this.MsDnEvt(idx);
             }
             return hnd;
         })(), false);
     }
-    obj.HeaderSet = function (wrap_div,bk_obj,chp_obj) {
-        var div = document.createElement('div');
-        wrap_div.appendChild(div);
-        var ary = [];
-        ary.push("text-align: center");
-        ary.push("white-space: pre");
-        ary.push("font-family: Verdana, Geneva, sans-serif");
-        ary.push(sprintf("font-size: %spx", this.FtSize*1.25));
-        ary.push("font-weight: 400");//400=Normal 700=bold,(100~900);
-        div.style.cssText = ary.join(";");
-        div.innerHTML = sprintf("Book %s: %s(<small>%s</small>)    Chapter: %s", bk_obj.BkIdx, bk_obj.BkName, bk_obj.BkBrf, chp_obj.ChpIdxInBk);
-    }
-    obj.BtnBarSet = function (tb) {
-        var tr, td;
-        tr = document.createElement('div');
-        tb.appendChild(tr);
-        tr.style.cssText = this.TrCssGet(0);
-        var btn_ary = ['&laquo;', '&lt;', 'Index', '&gt;', '&raquo;'];
-        for (var i = 0; i < 5; i++) {
-            td = document.createElement('div');
-            tr.appendChild(td);
-            td.innerHTML = btn_ary[i];
-            td.style.cssText = this.TdCssGet(1);
+ 
+
+    
+    this.DivWalk = function (cb_obj, cb_tag, node) {
+        var name = node.getAttribute("att-div-name");
+        if (!name)
+            return;
+        var ary = name.split("-");
+        switch (ary[0]) {
+            case "bar":
+                cb_obj.BarDiv = node;
+                break;
+            case "tb":
+                cb_obj.TbDiv = node;
+                break;
+            case "tr":
+                cb_obj.TrDiv = node;
+                break;
+            case "res":
+                node.appendChild(cb_obj.ResDiv);
+                break;
         }
     }
-    
 			        
-    obj.DivMake = function () {
-        this.WrapDiv = document.createElement('div');
-        //this.HeaderSet(this.WrapDiv,bk_obj,chp_obj);
-        var tb,tr,td;
-        tb = document.createElement('div');
-        tb.style.cssText = this.TbCssGet();
-        this.WrapDiv.appendChild(tb);
-
-        tr = document.createElement('div');
-        tb.appendChild(tr);
-        tr.style.cssText = this.TrCssGet();
+    this.DivMake = function () {
+        var ary = [];
+        ary.push('<div att-div-name="bar"></div>');
+        ary.push('<table att-div-name="tb">');
+        ary.push('  <tr att-div-name="tr" style="vertical-align: top" >');
+        ary.push('  </tr>');
+        ary.push('</table>');
+        var div = document.createElement('div');
+        div.innerHTML = ary.join("");
+        this.WrapDiv = div;
+        var cb_obj = CallbackSet(this.DivWalk, this, 0);
+        ElementWalk(div, cb_obj);
 
         for (var i = 0; i < this.ColumnAry.length; i++) {
             var col_obj = this.ColumnAry[i];
-            td=col_obj.DivMake();
-            tr.appendChild(td);
-            td.style.cssText = this.TdCssGet();
+            col_obj.DivMake();
+            var td = document.createElement('td');
+            td.style.cssText = sprintf("width: %s%", 100 / this.ColumnAry.length);
+            td.appendChild(col_obj.WrapDiv);
+            this.TrDiv.appendChild(td);
+            //break;
         }//i
 
         return this.WrapDiv;
@@ -108,21 +96,15 @@ Kjv.FunMain.ObjInit = function () {
         //var div0 = document.getElementById("KjvVerListDiv");//KjvParsePce();
         //div0.parentElement.replaceChild(div, div0);
     }
-    var find_obj = Kjv.FunFind.ObjInit();
-    for (var i = 1; i < 66; i++)
-        find_obj.BkAry.push(i);
-	//find_obj.BkAry.push(66);
-	find_obj.FindRegMake("thy neighbour");
-	find_obj.Find();
-	find_obj.VerClickCb = CallbackSet(obj.FindResClickEvt, obj, 0);
-	//obj.ColumnAry.push(find_obj);
+    var find_obj = new KjvFunFind();
+	find_obj.VerClickCb = CallbackSet(this.FindResClickEvt, this, 0);
+	this.ColumnAry.push(find_obj);
     var read_obj = Kjv.FunRead.ObjInit();
-    obj.ColumnAry.push(read_obj);
-    return obj;
+    this.ColumnAry.push(read_obj);
 }
-Kjv.FunMain.Demo = function () {
+KjvFunMain.Demo = function () {
 
-    var obj = Kjv.FunMain.ObjInit();
+    var obj = new KjvFunMain();
 	obj.DivMake();
     document.body.appendChild(obj.WrapDiv);
 }
