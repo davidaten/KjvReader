@@ -1,21 +1,19 @@
-﻿//Kjv.FunFind: find the matchs among BkAry and make div to show the found results.
-Kjv.FunFind = {};
-Kjv.FunFind.ObjInit = function () {
-    var obj = {};
-    obj.ColorStr = "hsl(0,0%,0%)";
-    obj.BkColorStr = "hsl(0,0%,100%)";
-    obj.HtColorStr = "hsl(248,100%,38%)";
-    obj.HtBkColorStr = "hsl(0,0%,100%)";
-    obj.FtSize = 16;
-    obj.BkAry = [];
-    obj.FindResAry = [];
-    obj.GbOn = 1;//Gb2312
-    obj.B5On = 1;//Big5
+﻿//KjvFunFind: find the matchs among BkAry and make div to show the found results.
+function KjvFunFind () {
+    DwxUiDiv.call(this);
 
-   
-	
+    this.ColorStr = "hsl(0,0%,0%)";
+    this.BkColorStr = "hsl(0,0%,100%)";
+    this.HtColorStr = "hsl(248,100%,38%)";
+    this.HtBkColorStr = "hsl(0,0%,100%)";
+    this.FtSize = 16;
+    this.BkAry = [];
+    this.FindResAry = [];
+    this.GbOn = 1;//Gb2312
+    this.B5On = 1;//Big5
+    var obj = this;
 
-	obj.BkTreeMake = function () {
+    this.BkTreeMake = function () {
 	    var bk_idx = 1;
 	    var tree_l1 = new DwxUiTree();
 	    for (var l1 = 0; l1 < 2;l1 ++){
@@ -48,8 +46,8 @@ Kjv.FunFind.ObjInit = function () {
 	    tree_l1.PreMake();
 	    this.BkTree = tree_l1;
 	}
-	obj.BkTreeMake();
-	obj.BkTreeScan = function () {
+    this.BkTreeMake();
+    this.BkTreeScan = function () {
 	    this.BkAry = [];
 	    var bk_idx = 1;
 	    var tree_l1 = this.BkTree;
@@ -66,7 +64,7 @@ Kjv.FunFind.ObjInit = function () {
 	    }
 	}
 
-	obj.ActMenuCbFun = function (cb_obj, cb_tag, node_obj_tag, sec_obj_tag) {
+    this.ActMenuCbFun = function (cb_obj, cb_tag, node_obj_tag, sec_obj_tag) {
 	    switch (node_obj_tag) {
 	        case "Find":
 	            cb_obj.BkTreeScan();
@@ -77,7 +75,7 @@ Kjv.FunFind.ObjInit = function () {
 	    }
 	}
 
-	obj.ActMenuMake = function () {
+    this.ActMenuMake = function () {
 	    var bk_idx = 1;
 	    var tree_l1 = new DwxUiTree();
 	    tree_l1.DirX = 1;
@@ -90,9 +88,9 @@ Kjv.FunFind.ObjInit = function () {
 	    tree_l1.MsDnCb = CallbackSet(this.ActMenuCbFun, this, 0);
 	    this.ActMenu = tree_l1;
 	}
-	obj.ActMenuMake();
+    this.ActMenuMake();
 
-	obj.FindRegMake = function (exp_str, flag_str) {
+    this.FindRegMake = function (exp_str, flag_str) {
 
 	    if (!flag_str)
 	        flag_str = 'ig';
@@ -110,7 +108,7 @@ Kjv.FunFind.ObjInit = function () {
     //   Found 42 at 33
     //   Found 88 at 40
     //string.replace callback: match,group1,group2,group3...,offset,string
-	obj.FindRplCb = function (match, $1) {
+    this.FindRplCb = function (match, $1) {
 	    obj.FindRplCnt++;
 	    var ary = [];
 	    ary.push(obj.Pos0Str);
@@ -118,7 +116,7 @@ Kjv.FunFind.ObjInit = function () {
 	    ary.push(obj.Pos1Str);
 	    return ary.join("");
 	}
-	obj.Find = function () {
+    this.Find = function () {
 	    this.FindResAry = [];
 	    this.FindRegMake(this.VerDiv.value);
 		for (var i=0;i<this.BkAry.length;i++){
@@ -144,7 +142,7 @@ Kjv.FunFind.ObjInit = function () {
 	}
 
 
-	obj.TbCssGet = function () {
+    this.TbCssGet = function () {
 	    var ary = [];
 	    ary.push("display: table");
 	    //ary.push(sprintf("background-color: %s",this.BkColorStr));
@@ -155,7 +153,7 @@ Kjv.FunFind.ObjInit = function () {
 	    return ary.join(";");
 	}
 
-	obj.TrCssGet = function (ht) {
+    this.TrCssGet = function (ht) {
 	    var ary = [];
 	    ary.push("display: table-row");
 	    if (ht == 0) {
@@ -169,14 +167,14 @@ Kjv.FunFind.ObjInit = function () {
 	    return ary.join(";");
 	}
 
-	obj.TdCssGet = function () {
+    this.TdCssGet = function () {
 	    var ary = [];
 	    ary.push("display: table-cell");
 	    ary.push("vertical-align: top");
 	    return ary.join(";");
 	}
 
-	obj.MsDnEvt = function (idx) {
+    this.MsDnEvt = function (idx) {
 	    if (!obj.VerClickCb)
 	        return;
 	    var prm = {};
@@ -185,7 +183,7 @@ Kjv.FunFind.ObjInit = function () {
 	    prm.VerIdx = obj.FindResAry[idx].VerIdx;
 	    obj.VerClickCb.CbFun(obj.VerClickCb.CbObj, obj.VerClickCb.CbTag, prm);
 	}
-	obj.MsDnSet = function (div, idx) {
+    this.MsDnSet = function (div, idx) {
 	    div.addEventListener("mousedown",
         (function () {
             //var ver_idx = idx;
@@ -196,10 +194,14 @@ Kjv.FunFind.ObjInit = function () {
         })(), false);
 	}
 
-    obj.ResDivMake = function () {
+    this.ResDivMake = function () {
         var res_div = document.createElement('div');
         //this.HeaderSet(this.WrapDiv,bk_obj,chp_obj);
-
+        if (this.VerDiv)
+            res_div.innerHTML = sprintf("Total %s result(s) in %s book(s) for searching [%s]:",
+                this.FindResAry.length, this.BkAry.length, this.VerDiv.value);
+        else
+            res_div.innerHTML = "No searching results here.";
         var tb = document.createElement('div');
         tb.style.cssText = this.TbCssGet();
         res_div.appendChild(tb);
@@ -242,7 +244,7 @@ Kjv.FunFind.ObjInit = function () {
         //div0.parentElement.replaceChild(div, div0);
     }
 
-    obj.DivWalk = function (cb_obj, cb_tag, node) {
+    this.DivWalk = function (cb_obj, cb_tag, node) {
         var name = node.getAttribute("data-div-name");
         if (!name)
             return;
@@ -263,7 +265,7 @@ Kjv.FunFind.ObjInit = function () {
         }
     }
 
-    obj.DivMake = function () {
+    this.DivMake = function () {
         this.BkTree.DivMake();
         this.ActMenu.DivMake();
         this.ResDivMake();
@@ -278,7 +280,6 @@ Kjv.FunFind.ObjInit = function () {
         ary.push('<br>');
         ary.push('<div data-div-name="act"></div>');
         ary.push('<br>');
-        ary.push('Searching results:');
         ary.push('<div data-div-name="res"></div>');
         var div = document.createElement('div');
         div.innerHTML = ary.join("");
@@ -298,15 +299,11 @@ Kjv.FunFind.ObjInit = function () {
 
     return obj;
 }
-Kjv.FunFind.Demo = function () {
+http://www.kingjamesbibleonline.org/search-advanced.php
+KjvFunFind.Demo = function () {
 
-    var obj = Kjv.FunFind.ObjInit();
-    /*
-	obj.BkAry.push(66);
-	obj.FindRegMake("jerusalem|temple|new");
-	obj.Find();
-    */
-	obj.DivMake();
+    var obj = new KjvFunFind();
+    obj.DivMake();
     document.body.appendChild(obj.WrapDiv);
 }
 

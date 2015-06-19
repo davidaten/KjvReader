@@ -1,6 +1,6 @@
 ﻿//KjvFunMain: find the matchs among BkAry and make div to show the found results.
 KjvFunMain = function () {
-    var obj = {};
+
     this.ColorStr = "hsl(0,0%,0%)";
     this.BkColorStr = "hsl(0,0%,100%)";
     this.HtColorStr = "hsl(248,100%,38%)";
@@ -72,7 +72,7 @@ KjvFunMain = function () {
         var ary = [];
         ary.push('<div att-div-name="bar"></div>');
         ary.push('<table att-div-name="tb">');
-        ary.push('  <tr att-div-name="tr">');
+        ary.push('  <tr att-div-name="tr" style="vertical-align: top" >');
         ary.push('  </tr>');
         ary.push('</table>');
         var div = document.createElement('div');
@@ -96,8 +96,8 @@ KjvFunMain = function () {
         //var div0 = document.getElementById("KjvVerListDiv");//KjvParsePce();
         //div0.parentElement.replaceChild(div, div0);
     }
-    var find_obj = Kjv.FunFind.ObjInit();
-	find_obj.VerClickCb = CallbackSet(obj.FindResClickEvt, obj, 0);
+    var find_obj = new KjvFunFind();
+	find_obj.VerClickCb = CallbackSet(this.FindResClickEvt, this, 0);
 	this.ColumnAry.push(find_obj);
     var read_obj = Kjv.FunRead.ObjInit();
     this.ColumnAry.push(read_obj);
