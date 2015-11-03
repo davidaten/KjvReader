@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- the following makes IE not prompt of javascript -->
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title> Text to Number</title>
+
+</head>
+<script>
+function Calc()
+{
+
+	var codeA="A".charCodeAt(0);
+	var txt,str,i,num;
+    txt=document.getElementById("input").value;
+    str=txt.toUpperCase();
+    var ary=[];
+    for (i=0,sum=0;i<txt.length;i++)
+    {
+        var chr=str.charAt(i);
+        var code=str.charCodeAt(i);
+        var num=code-codeA+1;
+        var astr=chr+"("+num+")";
+        ary.push(astr);
+        sum+=num;
+    }
+
+    var res=ary.join("+");
+    res=res+"="+sum.toString();    
+    var div=document.getElementById("sum");
+    div.textContent=res;
+}
+</script>
+<body>
+
+   <h1> Convert text to a number</h1>
+   A=1,B=2,...,Z=26<br> 
+   Input: <input type="text" id="input" >
+   <button onclick="Calc();">Submit</button>
+   <div id="sum"></div>
+   <br>
+   <hr>
+   Sum also with other numbers: num0,num1,...<br> 
+   Input other numbers: <input type="text" id="inputother">   
+   <button onclick="Sum();">Sum all</button>   
+   <br>
+   <div id="sumother"></div>
+   
+</body>
+</html>
+
+
