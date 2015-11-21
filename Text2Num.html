@@ -4,15 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title> Text to Number</title>
-
 </head>
 <script>
-function Calc()
+function CntTxt()
 {
 
 	var codeA="A".charCodeAt(0);
 	var txt,str,i,num;
-    txt=document.getElementById("input").value;
+    txt=document.getElementById("inputtxt").value;
     str=txt.toUpperCase();
     var ary=[];
     for (i=0,sum=0;i<txt.length;i++)
@@ -20,6 +19,8 @@ function Calc()
         var chr=str.charAt(i);
         var code=str.charCodeAt(i);
         var num=code-codeA+1;
+		if ((num<1)||(num>26))
+			continue;
         var astr=chr+"("+num+")";
         ary.push(astr);
         sum+=num;
@@ -27,25 +28,38 @@ function Calc()
 
     var res=ary.join("+");
     res=res+"="+sum.toString();    
-    var div=document.getElementById("sum");
+    var div=document.getElementById("sumtxt");
     div.textContent=res;
+}
+function CalcStr()
+{
+
+	var str;
+    str=document.getElementById("inputstr").value;
+
+    var sum=eval(str);
+    res=sum.toString();    
+    var div=document.getElementById("sumstr");
+    div.textContent=str+"="+res;
 }
 </script>
 <body>
 
-   <h1> Convert text to a number</h1>
-   A=1,B=2,...,Z=26<br> 
-   Input: <input type="text" id="input" >
-   <button onclick="Calc();">Submit</button>
-   <div id="sum"></div>
-   <br>
-   <hr>
-   Sum also with other numbers: num0,num1,...<br> 
-   Input other numbers: <input type="text" id="inputother">   
-   <button onclick="Sum();">Sum all</button>   
-   <br>
-   <div id="sumother"></div>
-   
+	<h2> Convert text to a number</h2>
+	Example input: Bible ABC<br> 
+	Input: <input type="text" id="inputtxt" >
+	<button onclick="CntTxt();">Submit</button>
+	<div id="sumtxt"></div>
+	<br>
+	
+	<hr>
+	
+	<h2> Calculate a string </h2>   
+	Example input: 4*8/2+1<br> 
+    Input: <input type="text" id="inputstr">
+	<br>  
+    <button onclick="CalcStr();">Submit</button>
+	<div id="sumstr"></div>	
 </body>
 </html>
 
