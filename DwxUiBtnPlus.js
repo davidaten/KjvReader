@@ -65,11 +65,11 @@ DwxUiBtnPlus = function () {
                 //ary.push("color: hsl(0, 0%, 0%)");
                 break;
             case 1:
-                div.innerHTML = "\u25BC";//down10004
+                div.innerHTML = "\u25BC";//down
                 //ary.push("color: hsl(127, 100%, 40%)");
                 break;
             case 2:
-                div.innerHTML = "\u25B2";//10008
+                div.innerHTML = "\u25B2";//up
                 //ary.push("color: hsl(4, 100%, 45%)");
                 break;
         };
