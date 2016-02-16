@@ -1,5 +1,5 @@
-var MsgList=[
-1, "ABRAHAM THE FRIEND OF GOD", "Daniel K", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00"
+var MsgList=[//idx, title, author, state, created dt, modified dt, published dt, clicked numbers, 
+1, "ABRAHAM THE FRIEND OF GOD", "Daniel K", "on", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00"
 ];
 // date=new Date("2014-02-01T09:28:56.321-10:00");
 // date.toISOString()="2016-02-12T03:46:22.870Z" missing zone info
