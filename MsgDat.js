@@ -29,5 +29,22 @@ function DateToZiso (date)
 }
 function MsgList ()
 {
+	var TbCss=new DwxUi();
+	TbCss.CssAttSet("color","rgb(116,116,116)");
+	TbCss.CssAttSet("line-height","30px");
+	var TrCss=new DwxUi();
+	TrCss.CssAttSet("border-bottom","1px solid rgb(224,228,233)");
+	var TdTitleCss=new DwxUi();
+	TdTitleCss.CssAttSet("color", "#0000ff");
 	
-}
+	var tb,tr,td;
+	tb = document.createElement('tb');
+	for (var i=0;i<3;i++)
+	{
+		tr=tb.insertRow(-1);
+		td=tr.insertCell(-1);
+		td.innerHTML = Int2Str(i, )
+	
+	var TrCss=new DwxUi();
+	TrCss.CssAttSet("border-bottom","1px solid rgb(224,228,233)");
+	
