@@ -38,31 +38,54 @@ function MsgList ()
 	this.TbCss=new DwxCssAry();
 	this.TbCss.AttSet("color: rgb(116,116,116)");
 	this.TbCss.AttSet("line-height: 30px");
+	this.TbCss.AttSet("border-collapse: collapse");//Important: it is needed to style tr border.
 	this.TrCss=new DwxCssAry();
 	this.TrCss.AttSet("border-bottom: 1px solid rgb(224,228,233)");
 	this.TdTitleCss=new DwxCssAry();
+	this.TdTitleCss.AttSet("font-weight: bold");
 	this.TdTitleCss.AttSet("color: #0000ff");
- 
+	this.TdGapCss=new DwxCssAry();
+	this.TdGapCss.AttSet("width: 30px");
+	
+	
 	 var tb,tr,td;
 	 tb = document.createElement('table');
+	 tb.style=this.TbCss.CssGet();
 	 for (var i=0; i<3;i++)
 	 {
+		var off=i*MsgListEnum.Max;
+		
 		tr=tb.insertRow(-1);
 		tr.style=this.TrCss.CssGet();
 		
 		td=tr.insertCell(-1);
+		td.style=this.TdGapCss.CssGet();
+		
+		td=tr.insertCell(-1);
 		td.innerHTML = Int2Str(i+1,10, 0);
 
-		var off=i*MsgListEnum.Max;
+		td=tr.insertCell(-1);
+		td.style=this.TdGapCss.CssGet();
+		
 		td=tr.insertCell(-1);
 		td.innerHTML = MsgListAry[off+MsgListEnum.Title];
 		td.style=this.TdTitleCss.CssGet();
 
 		td=tr.insertCell(-1);
+		td.style=this.TdGapCss.CssGet();
+		
+		td=tr.insertCell(-1);
 		td.innerHTML = MsgListAry[off+MsgListEnum.DtShow];
+		td.style="font-weight: bold;color: rgb(46, 50, 54)";
+		
+		td=tr.insertCell(-1);
+		td.style=this.TdGapCss.CssGet();
+		
+		td=tr.insertCell(-1);
+		td.innerHTML = MsgListAry[off+MsgListEnum.Author];
 
 		td=tr.insertCell(-1);
-		td.innerHTML = MsgListAry[off+MsgListEnum.Auther];
+		td.style=this.TdGapCss.CssGet();		
 	}
 	
 	this.WrapDiv=tb;

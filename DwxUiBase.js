@@ -15,7 +15,7 @@ function ElementWalk(node, cb_obj) {
 
 function Enum(ary) 
 {
-	for (var i in ary) 
+	for (var i=0; i<ary.length; i++) 
 	{
 		var name = ary[i];
 		this[name] = i;
