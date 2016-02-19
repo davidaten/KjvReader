@@ -13,9 +13,74 @@ function ElementWalk(node, cb_obj) {
     }
 }
 
-function DwxUiDiv() {
+function Enum(ary) 
+{
+	for (var i in ary) 
+	{
+		var name = ary[i];
+		this[name] = i;
+	}
+}
+
+function DwxCssAry()
+ {
+    this.CssAry = [];
+	this.AttSet = function(attstr) 
+	{
+		attstr.replace(";","");
+		var att_ary=attstr.split(":");
+		if (att_ary.length!=2)
+			throw "DwxCssAry error";
+		att_ary[0]=att_ary[0].trim();
+		att_ary[1]=att_ary[1].trim();		
+
+        for (var i = 0; i < this.CssAry.length; i += 2) {
+            if (this.CssAry [i] !=att_ary[0])
+                continue;
+            this.CssAry[i + 1] = att_ary[1];
+            return 1;
+        }
+         this.CssAry.push(att_ary[0]);
+        this.CssAry.push(att_ary[1]);
+        return 0;
+	}
+    this.CssGet = function () {
+        var str = "";
+        for (var i = 0; i < this.CssAry.length; i += 2) {
+            str += this.CssAry[i];
+            str += ":";
+            str += this.CssAry[i + 1];
+            str += ";";
+        }
+        return str;
+    }
+}
+	
+
+function DwxUiDiv()
+ {
     this.WrapDiv = null;
     this.CssAttAry = [];
+	this.AttAdd = function(attstr) 
+	{
+		attstr.replace(";","");
+		var att_ary=att.split(":");
+		if (att_ary.length!=2)
+			throw "DwxCssAry error";
+		att_ary[0]=att_ary[0].trim();
+		att_ary[1]=att_ary[1].trim();		
+        name = name.trim();
+        value = value.trim();
+        for (var i = 0; i < this.CssAttAry.length; i += 2) {
+            if (CssAttAry [i] !=att_ary[0])
+                continue;
+            CssAttAry[i + 1] = att_ary[1];
+            return 1;
+        }
+        CssAttAry.push(att_ary[0]);
+        CssAttAry.push(att_ary[1]);
+        return 0;
+	}
     this.CssAttSet = function (name, value) {
         //str.replace(/^\s+|\s+$/g, '');
         name = name.trim();
