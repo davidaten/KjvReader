@@ -2,9 +2,22 @@ var MsgListEnum=new Enum(["Idx", "Title", "Author", "State", "DtNew", "DtFix", "
 
 var MsgListAry=
 [//idx, title, author, state, created dt, modified dt, published dt, clicked numbers, 
-1, "ABRAHAM THE FRIEND OF GOD", "Daniel K", "on", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00", 0,
-2, "ABRAHAM THE FRIEND OF GOD", "Daniel K", "on", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00", 0,
-3, "ABRAHAM THE FRIEND OF GOD", "Daniel K", "on", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00", "2014-02-01T09:28:56.321-10:00", 0
+1, "ABRAHAM THE FRIEND OF GOD", "Daniel K", "on", "2014-09-09T13:27:00-8:00", "2014-09-09T13:27:00-8:00", "2014-09-09T13:27:00-8:00", 0,
+2, "A MESSAGE FROM GOD", "Daniel K", "on", "2014-09-09T16:15:00-8:00", "2014-09-09T16:15:00-8:00", "2014-09-09T16:15:00-8:00", 0,
+3, "ANGEL MORPHIET AND ANGEL DARIUS", "Daniel K", "on", "2014-10-05T08:23:00-8:00", "2014-10-05T08:23:00-8:00", "2014-10-05T08:23:00-8:00", 0,
+4, "THE 182 SPIRIT", "Daniel K", "on", "2014-10-08T08:12:00-8:00", "2014-10-08T08:12:00-8:00", "2014-10-08T08:12:00-8:00", 0,
+5, "A MESSAGE FROM THE LORD OF HOSTS", "Daniel K", "on", "2014-10-25T06:03:00-8:00", "2014-10-25T06:03:00-8:00", "2014-10-25T06:03:00-8:00", 0,
+6, "GOD THUNDERS", "Daniel K", "on", "2014-10-29T08:18:00-8:00", "2014-10-29T08:18:00-8:00", "2014-10-29T08:18:00-8:00", 0,
+7, "IS THERE AN ANGEL OF DEATH?", "Daniel K", "on", "2014-11-07T11:47:00-8:00", "2014-11-07T11:47:00-8:00", "2014-11-07T11:47:00-8:00", 0,
+8, "MESSAGE FROM THE LORD ON THE DAY OF TRUMPETS", "Daniel K", "on", "2014-11-18T06:46:00-8:00", "2014-11-18T06:46:00-8:00", "2014-11-18T06:46:00-8:00", 0,
+9, "THE THREE ARKS OF GOD", "Daniel K", "on", "2014-11-22T04:29:00-8:00", "2014-11-22T04:29:00-8:00", "2014-11-22T04:29:00-8:00", 0,
+10, "ED -THE GREAT AND MIGHTY SERVANT OF GOD", "Daniel K", "on", "2014-12-07T07:02:00-8:00", "2014-12-07T07:02:00-8:00", "2014-12-07T07:02:00-8:00", 0,
+11, "PRAISE AND WORSHIP THROUGH SONG", "Daniel K", "on", "2014-09-09T09:59:00-8:00", "2014-09-09T09:59:00-8:00", "2014-09-09T09:59:00-8:00", 0,
+12, "THE LORD SPEAKS TO CHILDREN", "Daniel K", "on", "2014-12-15T14:30:00-8:00", "2014-12-15T14:30:00-8:00", "2014-12-15T14:30:00-8:00", 0,
+13, "OPPORTUNITY TO ASK QUESTION ABOUT HELL", "Daniel K", "on", "2014-12-18T07:36:00-8:00", "2014-12-18T07:36:00-8:00", "2014-12-18T07:36:00-8:00", 0,
+14, "HELL (PART ONE)", "Daniel K", "on", "2014-12-21T07:04:00-8:00", "2014-12-21T07:04:00-8:00", "2014-12-21T07:04:00-8:00", 0,
+15, "DOES FASTING SERVE ANY PURPOSE", "Daniel K", "on", "2014-09-09T12:05:00-8:00", "2014-09-09T12:05:00-8:00", "2014-09-09T12:05:00-8:00", 0,
+16, "HELL (PART TWO)", "Daniel K", "on", "2014-12-22T05:41:00-8:00", "2014-12-22T05:41:00-8:00", "2014-12-22T05:41:00-8:00", 0,
 ];
 // date=new Date("2014-02-01T09:28:56.321-10:00");
 // date.toISOString()="2016-02-12T03:46:22.870Z" missing zone info
@@ -68,14 +81,15 @@ function MsgList ()
 		td.style=this.TdGapCss.CssGet();
 		
 		td=tr.insertCell(-1);
-		td.innerHTML = MsgListAry[off+MsgListEnum.Title];
+		td.innerHTML = '<a href="1.html">'+MsgListAry[off+MsgListEnum.Title]+'</a>';
 		td.style=this.TdTitleCss.CssGet();
 
 		td=tr.insertCell(-1);
 		td.style=this.TdGapCss.CssGet();
 		
 		td=tr.insertCell(-1);
-		td.innerHTML = MsgListAry[off+MsgListEnum.DtShow];
+		var date=new Date(MsgListAry[off+MsgListEnum.DtShow]);
+		td.innerHTML = date.toLocaleString() ; //date.toString();
 		td.style="font-weight: bold;color: rgb(46, 50, 54)";
 		
 		td=tr.insertCell(-1);
