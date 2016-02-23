@@ -22,9 +22,10 @@ function Enum(ary)
 	}
 }
 
-function DwxCssAry()
+var DwxCssAry=function()
  {
     this.CssAry = [];
+	/*
 	this.AttSet = function(attstr) 
 	{
 		attstr.replace(";","");
@@ -43,7 +44,9 @@ function DwxCssAry()
          this.CssAry.push(att_ary[0]);
         this.CssAry.push(att_ary[1]);
         return 0;
+		
 	}
+	*/
     this.CssGet = function () {
         var str = "";
         for (var i = 0; i < this.CssAry.length; i += 2) {
@@ -55,7 +58,36 @@ function DwxCssAry()
         return str;
     }
 }
+
+DwxCssAry.prototype.AttSet = function(attstr) 
+{
+	attstr.replace(";","");
+	var att_ary=attstr.split(":");
+	if (att_ary.length!=2)
+		throw "DwxCssAry error";
+	att_ary[0]=att_ary[0].trim();
+	att_ary[1]=att_ary[1].trim();		
+
+	for (var i = 0; i < this.CssAry.length; i += 2) {
+		if (this.CssAry [i] !=att_ary[0])
+			continue;
+		this.CssAry[i + 1] = att_ary[1];
+		return 1;
+	}
+	 this.CssAry.push(att_ary[0]);
+	this.CssAry.push(att_ary[1]);
+	return 0;
 	
+}
+	
+var DwxEvtHndAdd = function (div, evt_name, cb_hnd) 
+{
+	var hnd=function (evt) 
+	{
+		cb_hnd.CbFun.call(cb_obj.CbObj, cb_obj.CbTag, evt);
+	};
+	div.addEventListener(evt_name, hnd, false);
+}		
 
 function DwxUiDiv()
  {
