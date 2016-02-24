@@ -1,20 +1,15 @@
-var KjvCatMapAry = [
-    "Law", 5, "History", 12, "Poetry/Wisdom", 5, "Major Prophets", 5, "Minor Prophets", 12,
-    "Gospels", 4, "History", 1, "Paul's Letters", 14, "Other Letters", 7, "Prophecy", 1
-];
 
-
-var KjvBkInit = function(idx)
+var KjvChpInit = function(idx)
 {
-   	var off = (idx - 1) * 5;
-	this.BkIdx = KjvBkListAry[off + 0];
-	this.BkBrf = KjvBkListAry[off + 1];
-	this.BkName = KjvBkListAry[off + 2];
-	this.ChpOffInAll = KjvBkListAry[off + 3];
-	this.ChpNumInBk = KjvBkListAry[off + 4];
+	var off = (idx - 1) * 5;
+	this.ChpIdxInAll =  KjvChpListAry[off + 0];
+	this.BkBrf =  KjvChpListAry[off + 1];
+	this.ChpIdxInBk =  KjvChpListAry[off + 2];
+	this.VerOffInAll =  KjvChpListAry[off + 3];
+	this.VerNumInChp =  KjvChpListAry[off + 4];
 }	
 
-KjvBkDiv= function()
+KjvChpDiv= function()
 {
 	var chk_sign_on = 0;
 	var bk_idx = 1;
