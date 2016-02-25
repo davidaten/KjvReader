@@ -9,43 +9,30 @@ var KjvChpInit = function(idx)
 	this.VerNumInChp =  KjvChpListAry[off + 4];
 }	
 
-KjvChpDiv= function()
+KjvChpDiv= function(bk_obj)
 {
-	var chk_sign_on = 0;
-	var bk_idx = 1;
 	var tree_l1 = new DwxUiTree();
-	tree_l1.ChkSignOn = chk_sign_on;
+	var l1_num=bk_obj.ChpNumInBk/10;
+	if (bk_obj.ChpNumInBk%10)
+		l1_num++;
 	//First level: old and new testaments.
-	for (var l1 = 0; l1 < 2;l1 ++)
+	for (var l1 = 0; l1 < l1_num; l1++)
 	{
-		if (l1 == 0) 
-			tree_l1.NodeAdd(-1, "T-0", "Old Testament");
-		else
-			tree_l1.NodeAdd(-1, "T-1", "New Testament");
+		var c1=l1*10+1;
+		var c2=l1*10+10;
+		if (c2>bk_obj.ChpNumInBk)
+			c2=bk_obj.ChpNumInBk;
+		tree_l1.NodeAdd(-1, sprintf("T-%s", c1), sprintf("%s~%s", c1, c2) );
 
 		var tree_l2 = new DwxUiTree();
 		tree_l1.NodeSubSet(l1, tree_l2);
-		tree_l2.ChkSignOn = chk_sign_on;
-		var c_off = l1*10;
+		//tree_l2.ChkSignOn = chk_sign_on;
+		var l2_num=c2-c1+1;
 		//Each first level has 5 catelogs.
-		for (var l2 = 0 ; l2 < 10 ; l2+=2) 
+		for (var l2 = 0; l2 < l2_num; l2++) 
 		{
-			tree_l2.NodeAdd(-1, sprintf("C-%s", (c_off + l2) / 2), KjvCatMapAry[c_off + l2]);
-			var tree_l3 = new DwxUiTree();
-			tree_l2.NodeSubSet(l2 / 2, tree_l3);
-			tree_l3.ChkSignOn = chk_sign_on;
-			//tree_l3.DirX = 1;
-			//tree_l3.SubSignOn = 0;
-			for (var l3 = 0; l3 < KjvCatMapAry[c_off + l2 + 1]; l3++) {
-				var bk_obj = new KjvBkInit(bk_idx);
-				tree_l3.NodeAdd(-1, sprintf("B-%s", bk_idx), bk_obj.BkName);
-				bk_idx++;
-			}
-
-			if (((l1 == 0) && (l2 == 0)) || ((l1 == 1) && (l2 == 0)) || ((l1 == 1) && (l2 == 8)))
-				tree_l2.NodeAry[l2 / 2].SubStat = 1;
-			else
-				tree_l2.NodeAry[l2 / 2].SubStat = 0;
+			tree_l2.NodeAdd(-1, sprintf("C-%s", c1+l2, c1+l2));
+			tree_l2.NodeAry[l2].SubStat = 0;
 		}
 	}
 	
