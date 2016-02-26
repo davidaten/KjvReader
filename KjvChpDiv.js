@@ -24,7 +24,10 @@ KjvChpDiv= function(bk_obj)
 		if (c2>bk_obj.ChpNumInBk)
 			c2=bk_obj.ChpNumInBk;
 		tree_l1.NodeAdd(-1, sprintf("T-%s", c1), sprintf("%s~%s", c1, c2) );
-		tree_l1.NodeAry[l1].SubStat = 0; //Packed
+		if (l1==0)
+			tree_l1.NodeAry[l1].SubStat = 1; //Show sublist 
+		else
+			tree_l1.NodeAry[l1].SubStat = 0; //Hide sublist
 		
 		var tree_l2 = new DwxUiTree();
 		tree_l1.NodeSubSet(l1, tree_l2);
