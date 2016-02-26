@@ -110,6 +110,6 @@ function MsgListDemo()
 	var Msg=new MsgList();
 	document.body.appendChild(Msg.WrapDiv);
 	var div=KjvBkDiv();
-	var bk_obj=new KjvBkInit(1);
+	var bk_obj=new KjvBkInit(3);
 	var div=KjvChpDiv(bk_obj);
 }
